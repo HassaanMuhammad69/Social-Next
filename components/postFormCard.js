@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Avatar from "./avatar";
 import Card from "./card";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
+import { UserContext } from "@/context/userContext";
 
 
-export default function PostForm() {
-    const [profile, setProfile] = useState(null)
+export default function PostForm({onPost}) {
+
     const [content, setContent] = useState('')
     const supabase = useSupabaseClient();
     const session = useSession();
-    useEffect(() => {
-        supabase.from('profiles')
-            .select()
-            .eq('id', session.user.id)
-            .then(result => {
-                if (result.data.length) {
-                    setProfile(result.data[0])
-                }
-            })
-    }, [])
+    const {profile}= useContext(UserContext)
+    
+
+    
 
     function createPost(){
         supabase.from('posts').insert({
@@ -28,7 +23,9 @@ export default function PostForm() {
             response =>{
                 if(!response.error){
                     setContent('');
-                    alert('created!')
+                    if(onPost){
+                        onPost()
+                    }
                 }
             }
         )

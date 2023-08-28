@@ -1,21 +1,27 @@
 import Link from "next/link";
 import Avatar from "./avatar";
 import Card from "./card";
+import ReactTimeAgo from "react-time-ago";
+import { useContext } from "react";
+import { UserContext } from "@/context/userContext";
 
-export default function PostCard() {
+export default function PostCard({ content, profiles:authorProfile, created_at }) {
+    const {profile:myProfile}= useContext(UserContext)
     return (
-        <Card>
+        <Card> 
             <div className='flex gap-3'>
                 <div>
                     <Link href={'/profile'}>
-                    <Avatar />
+                        <Avatar url={authorProfile?.avatar} />
                     </Link>
                 </div>
                 <div className='grow'>
                     <p>
-                        <Link className='font-semibold' href={'/profile'} >Hassaan Muhammad</Link>  shared an <a className=' text-socialBlue'>album</a>
+                        <Link className='font-semibold' href={'/profile'} >{authorProfile?.name}</Link>  shared a post
                     </p>
-                    <p className='text-gray-500 text-sm'>2 hours ago</p>
+                    <p className='text-gray-500 text-sm'>
+                        <ReactTimeAgo date={created_at} />
+                    </p>
                 </div>
 
                 <div>
@@ -29,7 +35,7 @@ export default function PostCard() {
 
             </div>
             <div>
-                <p className='my-3 text-sm'>As long as there is love, there will be a hate _Minato Namikaza </p>
+                <p className='my-3 text-sm'>{content} </p>
                 <div className='rounded-md overflow-hidden'>
                     <img src="https://th.bing.com/th/id/R.93904a49335c8e32dd484888b07b600a?rik=NF%2bVnzFnuerXOw&riu=http%3a%2f%2fimages4.fanpop.com%2fimage%2fphotos%2f18500000%2fMinato-naruto-shippuuden-18522625-1280-720.jpg&ehk=7jboACYSs9korceFFXYgs%2bEUkv2GSJrgThy0ttD2uI4%3d&risl=&pid=ImgRaw&r=0"></img>
                 </div>
@@ -54,7 +60,7 @@ export default function PostCard() {
             </div>
             <div className='flex mt-4 gap-3'>
                 <div>
-                    <Avatar />
+                    <Avatar url={myProfile?.avatar} />
                 </div>
                 <div className='border grow rounded-full relative'>
                     <textarea className='block w-full rounded-full p-3 overflow-hidden px-4 h-12 ' placeholder="Leave a comment"></textarea>
