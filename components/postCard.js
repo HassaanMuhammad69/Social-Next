@@ -5,10 +5,10 @@ import ReactTimeAgo from "react-time-ago";
 import { useContext } from "react";
 import { UserContext } from "@/context/userContext";
 
-export default function PostCard({ content, profiles:authorProfile, created_at }) {
-    const {profile:myProfile}= useContext(UserContext)
+export default function PostCard({ content, photos, profiles: authorProfile, created_at }) {
+    const { profile: myProfile } = useContext(UserContext)
     return (
-        <Card> 
+        <Card>
             <div className='flex gap-3'>
                 <div>
                     <Link href={'/profile'}>
@@ -36,9 +36,18 @@ export default function PostCard({ content, profiles:authorProfile, created_at }
             </div>
             <div>
                 <p className='my-3 text-sm'>{content} </p>
-                <div className='rounded-md overflow-hidden'>
+                {photos?.length > 0 && (
+                    <div className='flex gap-4'>
+                        {photos.map(photo => (
+                            <div className=''>
+                                <img src={photo} className='rounded-md' alt="" />
+                            </div>
+                        ))}
+                    </div>
+                )}
+                {/* <div className='rounded-md overflow-hidden'>
                     <img src="https://th.bing.com/th/id/R.93904a49335c8e32dd484888b07b600a?rik=NF%2bVnzFnuerXOw&riu=http%3a%2f%2fimages4.fanpop.com%2fimage%2fphotos%2f18500000%2fMinato-naruto-shippuuden-18522625-1280-720.jpg&ehk=7jboACYSs9korceFFXYgs%2bEUkv2GSJrgThy0ttD2uI4%3d&risl=&pid=ImgRaw&r=0"></img>
-                </div>
+                </div> */}
             </div>
             <div className="mt-5 flex gap-8">
                 <button className='flex gap-2 items-center' >

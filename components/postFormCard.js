@@ -10,7 +10,7 @@ export default function PostForm({ onPost }) {
 
     const [content, setContent] = useState('')
     const supabase = useSupabaseClient();
-    const session = useSession();
+    const session = useSession(); 
     const { profile } = useContext(UserContext)
     const [uploads, setUploads] = useState([])
     const [isUploading, setIsUploading] = useState(false)
@@ -22,10 +22,12 @@ export default function PostForm({ onPost }) {
         supabase.from('posts').insert({
             author: session.user.id,
             content,
+            photos: uploads,
         }).then(
             response => {
                 if (!response.error) {
                     setContent('');
+                    setUploads([])
                     if (onPost) {
                         onPost()
                     }
@@ -81,7 +83,7 @@ export default function PostForm({ onPost }) {
             {uploads.length > 0 && (
                 <div className='flex gap-2'>
                     {uploads.map(upload => (
-                        <div className=''>
+                        <div className='mt-2'>
                             <img src={upload} className='w-auto h-24 rounded-md' />
                         </div>
                     ))}
