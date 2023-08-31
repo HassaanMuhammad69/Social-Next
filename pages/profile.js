@@ -5,11 +5,35 @@ import Link from "next/link";
 import PostCard from "@/components/postCard";
 import { useRouter } from "next/router";
 import FriendInfo from "@/components/friendInfo";
+import { useEffect, useState } from "react";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 
 export default function Profile() {
+    const[profile,setProfile]=  useState(null)
     const router = useRouter();
+    const userId = router.query.id;
     const { asPath: pathname } = router
+    const supabase= useSupabaseClient()
+
+    useEffect(()=>{
+        if(!userId){
+            return
+        }
+        supabase.from('profiles')
+        .select()
+        .eq('id', userId)
+        .then(result=>{
+            if(result.error){
+                throw result.error
+            }
+            if(result.data){
+                setProfile(result.data[0])
+            }
+        })
+    },[userId])
+
     const isPosts = pathname.includes('posts') || pathname === '/profile'
     const isAbout = pathname.includes('about')
     const isFriend = pathname.includes('friends')
@@ -23,13 +47,15 @@ export default function Profile() {
                     <div className='h-48 overflow-hidden flex justify-center items-center'>
                         <img src="https://wallpaperaccess.com/full/377906.jpg" />
                     </div>
-                    <div className='absolute top-24 left-4'>
-                        <Avatar size={'lg'} />
+                    <div className='absolute top-40 left-4'>
+                        {profile && (
+                        <Avatar url={profile?.avatar} size={'lg'} />
+                        )}
                     </div>
                     <div className='p-4 pt-0 md:pt-4 pb-0'>
                         <div className='ml-24 md:ml-36'>
                             <h1 className=' text-2xl font-bold'>
-                                Hassaan Muhammad
+                               {profile?.name}
                             </h1>
                             <div className='text-gray-500 leading-4'>Karachi, Pakistan</div>
                         </div>

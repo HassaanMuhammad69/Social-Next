@@ -17,7 +17,8 @@ export default function PostCard({ content, photos, profiles: authorProfile, cre
                 </div>
                 <div className='grow'>
                     <p>
-                        <Link className='font-semibold' href={'/profile'} >{authorProfile?.name}</Link>  shared a post
+                        <Link className='font-semibold' href={'/profile/'+authorProfile?.id} >
+                            {authorProfile?.name}</Link>  shared a post
                     </p>
                     <p className='text-gray-500 text-sm'>
                         <ReactTimeAgo date={created_at} />
